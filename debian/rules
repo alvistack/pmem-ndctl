@@ -1,0 +1,34 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DEB_CPPFLAGS_MAINT_APPEND = -I/usr/include/iniparser/
+include /usr/share/dpkg/architecture.mk
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	dh_auto_configure \
+		-- \
+		-Dasciidoctor=disabled \
+		-Ddocs=disabled \
+		-Dlibtracefs=disabled \
+		-Dsystemd=disabled \
+		-Dtest=disabled
+
+override_dh_auto_test:
+
+override_dh_auto_clean:
+
+override_dh_installinit:
+	dh_installinit -p ndctl --init-script=ndctl-monitor
+
+override_dh_install:
+	mv debian/tmp/usr/$(DEB_HOST_MULTIARCH)/* debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/
+	dh_install
+
+override_dh_makeshlibs:
+	dh_makeshlibs -- -c4
+
+override_dh_missing:
+	dh_missing --fail-missing

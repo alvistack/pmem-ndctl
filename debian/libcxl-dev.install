@@ -1,0 +1,3 @@
+usr/include/cxl/*.h
+usr/lib/*/libcxl.so
+usr/lib/*/pkgconfig/libcxl.pc
