@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0
 // Copyright (C) 2015-2021 Intel Corporation. All rights reserved.
 #include <limits.h>
-#include <errno.h>
 #include <util/json.h>
-#include <util/bitmap.h>
 #include <uuid/uuid.h>
 #include <cxl/libcxl.h>
 #include <json-c/json.h>
@@ -13,7 +11,6 @@
 #include "filter.h"
 #include "json.h"
 #include "../daxctl/json.h"
-#include "../util/event_trace.h"
 
 #define CXL_FW_VERSION_STR_LEN	16
 #define CXL_FW_MAX_SLOTS	4
@@ -675,12 +672,6 @@ struct json_object *util_cxl_memdev_to_json(struct cxl_memdev *memdev,
 			json_object_object_add(jdev, "firmware", jobj);
 	}
 
-	if (flags & UTIL_JSON_MEDIA_ERRORS) {
-		jobj = util_cxl_poison_list_to_json(NULL, memdev, flags);
-		if (jobj)
-			json_object_object_add(jdev, "media_errors", jobj);
-	}
-
 	json_object_set_userdata(jdev, memdev, NULL);
 	return jdev;
 }
@@ -1027,12 +1018,6 @@ struct json_object *util_cxl_region_to_json(struct cxl_region *region,
 		jobj = json_object_new_string("disabled");
 		if (jobj)
 			json_object_object_add(jregion, "state", jobj);
-	}
-
-	if (flags & UTIL_JSON_MEDIA_ERRORS) {
-		jobj = util_cxl_poison_list_to_json(region, NULL, flags);
-		if (jobj)
-			json_object_object_add(jregion, "media_errors", jobj);
 	}
 
 	util_cxl_mappings_append_json(jregion, region, flags);
