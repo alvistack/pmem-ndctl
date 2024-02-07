@@ -17,30 +17,6 @@ EXTRA_DIST += ndctl.spec.in \
 		sles/header \
 		contrib/nvdimm-security.conf
 
-noinst_SCRIPTS = rhel/ndctl.spec sles/ndctl.spec
-CLEANFILES += $(noinst_SCRIPTS)
-
-do_rhel_subst = sed -e 's,VERSION,$(VERSION),g' \
-            -e 's,DAX_DNAME,daxctl-devel,g' \
-            -e 's,DNAME,ndctl-devel,g' \
-            -e '/^%defattr.*/d' \
-	    -e 's,DAX_LNAME,daxctl-libs,g' \
-	    -e 's,LNAME,ndctl-libs,g'
-
-do_sles_subst = sed -e 's,VERSION,$(VERSION),g' \
-            -e 's,DAX_DNAME,libdaxctl-devel,g' \
-            -e 's,DNAME,libndctl-devel,g' \
-            -e 's,%license,%doc,g' \
-            -e 's,\(^License:.*GPL\)v2,\1-2.0,g' \
-            -e "s,DAX_LNAME,libdaxctl$$(($(LIBDAXCTL_CURRENT) - $(LIBDAXCTL_AGE))),g" \
-            -e "s,LNAME,libndctl$$(($(LIBNDCTL_CURRENT) - $(LIBNDCTL_AGE))),g"
-
-rhel/ndctl.spec: ndctl.spec.in Makefile.am version.m4
-	$(AM_V_GEN)$(MKDIR_P) rhel; $(do_rhel_subst) < $< > $@
-
-sles/ndctl.spec: sles/header ndctl.spec.in Makefile.am version.m4
-	$(AM_V_GEN)$(MKDIR_P) sles; cat sles/header $< | $(do_sles_subst) > $@
-
 if ENABLE_BASH_COMPLETION
 bashcompletiondir = $(BASH_COMPLETION_DIR)
 dist_bashcompletion_DATA = contrib/ndctl

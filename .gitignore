@@ -29,6 +29,7 @@ ndctl/lib/libndctl.pc
 ndctl/ndctl
 rhel/
 sles/ndctl.spec
+util/iomem.lo
 util/log.lo
 util/sysfs.lo
 version.m4
