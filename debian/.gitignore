@@ -1,0 +1,13 @@
+*.substvars
+*debhelper*
+.debhelper
+files
+tmp
+daxctl
+libcxl-dev
+libcxl1
+libdaxctl-dev
+libdaxctl1
+libndctl-dev
+libndctl6
+ndctl
