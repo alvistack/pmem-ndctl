@@ -1,0 +1,5 @@
+etc/ndctl
+etc/modprobe.d/nvdimm-security.conf
+ndctl/*.service lib/systemd/system
+usr/bin/ndctl
+usr/share/bash-completion/completions/ndctl
